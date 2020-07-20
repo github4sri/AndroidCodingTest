@@ -14,7 +14,7 @@ public class Row {
     private String description;
     @SerializedName("imageHref")
     @Expose
-    private Object imageHref;
+    private String imageHref;
 
     /**
      * No args constructor for use in serialization
@@ -29,7 +29,7 @@ public class Row {
      * @param description
      * @param title
      */
-    public Row(String title, String description, Object imageHref) {
+    public Row(String title, String description, String imageHref) {
         super();
         this.title = title;
         this.description = description;
@@ -56,7 +56,7 @@ public class Row {
         return imageHref;
     }
 
-    public void setImageHref(Object imageHref) {
+    public void setImageHref(String imageHref) {
         this.imageHref = imageHref;
     }
 

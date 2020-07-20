@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,37 +19,26 @@ import com.srikanth.androidcodingtest.retrofit.RetrofitClient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
     ApiInterface apiInterface;
 
     RecyclerView recyclerView;
+    Adapter adapter;
     private ArrayList<Row> rowData = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         getCanadaFactsResponse();
-        recyclerView = findViewById(R.id.recyclerview);
 
-        rowData.add(new Row("Sri", "Android app developer jfhsfsflk sdkhjfjhsdjkfj kjhsdfjhhjsdf", 0));
-        rowData.add(new Row("Sri", "Android app developer jfhsfsflk sdkhjfjhsdjkfj kjhsdfjhhjsdf jfhsfsflk sdkhjfjhsdjkfj kjhsdfjhhjsdf", 1));
-        rowData.add(new Row("Sri", null, 2));
-        rowData.add(new Row(null, "Android app developer", 3));
-        rowData.add(new Row("Sri", "Android app developer", 4));
-
-        Adapter adapter = new Adapter(rowData);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
     }
 
     /**
@@ -61,10 +51,12 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(@NotNull Call<Model> call, @NotNull Response<Model> response) {
-                Gson gson = new Gson();
                 Model model = response.body();
                 assert model != null;
-                Log.d("RESPONSE",gson.toJson(model));
+                List<Row> factsData = model.getRows();
+                setRecyclerViewData((ArrayList<Row>) factsData);
+                ActionBar actionBar = getSupportActionBar();
+                
             }
 
             @Override
@@ -73,5 +65,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    //Bind api response to Recycler view
+    private void setRecyclerViewData(ArrayList<Row> factsList) {
+        recyclerView = findViewById(R.id.recyclerview);
+        Adapter adapter = new Adapter(factsList,this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

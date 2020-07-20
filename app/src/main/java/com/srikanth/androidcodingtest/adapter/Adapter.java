@@ -1,5 +1,6 @@
 package com.srikanth.androidcodingtest.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +10,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.srikanth.androidcodingtest.R;
 import com.srikanth.androidcodingtest.model.Row;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
 
     private ArrayList<Row> rowData;
+    private Context context;
 
-    public Adapter(ArrayList<Row> rowData) {
+    public Adapter(ArrayList<Row> rowData, Context context) {
         this.rowData = rowData;
+        this.context = context;
     }
 
     @NonNull
@@ -35,8 +38,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
         Row row = rowData.get(position);
         holder.tvTitle.setText(row.getTitle());
         holder.tvDesc.setText(row.getDescription());
-        //TODO need to work here
-        holder.ivImage.setImageResource(R.drawable.ic_launcher_foreground);
+        Glide.with(context)
+                .load(row.getImageHref())
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(holder.ivImage);
     }
 
     @Override
