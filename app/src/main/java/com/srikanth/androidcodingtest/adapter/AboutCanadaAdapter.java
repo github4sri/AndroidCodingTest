@@ -16,25 +16,25 @@ import com.srikanth.androidcodingtest.model.Row;
 
 import java.util.ArrayList;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
+public class AboutCanadaAdapter extends RecyclerView.Adapter<AboutCanadaAdapter.viewHolder> {
 
     private ArrayList<Row> rowData;
     private Context context;
 
-    public Adapter(ArrayList<Row> rowData, Context context) {
+    public AboutCanadaAdapter(ArrayList<Row> rowData, Context context) {
         this.rowData = rowData;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public Adapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AboutCanadaAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         return new viewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Adapter.viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AboutCanadaAdapter.viewHolder holder, int position) {
         Row row = rowData.get(position);
         holder.tvTitle.setText(row.getTitle());
         holder.tvDesc.setText(row.getDescription());

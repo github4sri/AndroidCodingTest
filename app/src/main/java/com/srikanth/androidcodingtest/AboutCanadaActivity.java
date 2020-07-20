@@ -1,7 +1,6 @@
 package com.srikanth.androidcodingtest;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -10,8 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.gson.Gson;
-import com.srikanth.androidcodingtest.adapter.Adapter;
+import com.srikanth.androidcodingtest.adapter.AboutCanadaAdapter;
 import com.srikanth.androidcodingtest.model.Model;
 import com.srikanth.androidcodingtest.model.Row;
 import com.srikanth.androidcodingtest.retrofit.ApiInterface;
@@ -26,18 +24,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class AboutCanadaActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     SwipeRefreshLayout mSwipeRefreshLayout;
     ApiInterface apiInterface;
     RecyclerView recyclerView;
-    Adapter adapter;
+    AboutCanadaAdapter aboutCanadaAdapter;
     private ArrayList<Row> rowData = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loadRecyclerViewDataWithSwipeRefresh();
+    }
+
+    //Handle data with swipe to refresh
+    private void loadRecyclerViewDataWithSwipeRefresh() {
         // SwipeRefreshLayout
         mSwipeRefreshLayout = findViewById(R.id.swipeContainer);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -51,12 +54,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
          * As animation won't start on onCreate, post runnable is used
          */
         mSwipeRefreshLayout.post(new Runnable() {
-
             @Override
             public void run() {
-
                 mSwipeRefreshLayout.setRefreshing(true);
-
                 // Fetching data from server
                 getCanadaFactsResponse();
             }
@@ -97,10 +97,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     //Bind api response to Recycler view
     private void setRecyclerViewData(ArrayList<Row> factsList) {
         recyclerView = findViewById(R.id.recyclerview);
-        Adapter adapter = new Adapter(factsList,this);
+        AboutCanadaAdapter aboutCanadaAdapter = new AboutCanadaAdapter(factsList,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(aboutCanadaAdapter);
+        aboutCanadaAdapter.notifyDataSetChanged();
         // Stopping swipe refresh
         mSwipeRefreshLayout.setRefreshing(false);
     }
